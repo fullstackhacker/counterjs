@@ -4,7 +4,7 @@
   "description": "Counting As A Service",
   "main": "./bin/www",
   "scripts": {
-    "start": "node ./bin/www",
+    "start": "SECRET=h4x node ./bin/www",
     "test": "mocha"
   },
   "repository": {

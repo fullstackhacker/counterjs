@@ -1,5 +1,6 @@
+var router = require('express').Router();
 var counter = require('./counter');
 
-module.exports = {
-  counter: counter;
-};
+router.use('/', counter);
+
+module.exports = router;
