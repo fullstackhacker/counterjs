@@ -2,13 +2,32 @@ var express = require('express');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var expressSession = require('express-session');
+var RedisStore = require('connect-redis')(expressSession);
 
 var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser({secret: process.env.SECRET}));
+
+app.use(expressSession({
+  store: new RedisStore({
+    client: redisClient
+  }),
+  secret: process.env.SECRET
+});
+
+app.use(function(req, res, next){
+  if (!req.session){
+    return res.json({
+      'error': "Internal errors"
+    });
+  }
+
+  return next();
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
